@@ -1,8 +1,10 @@
 import { useState,useEffect } from "react"
 import blogService from '../services/blogs'
+import { useDispatch } from "react-redux"
 const Blog = ({ blog, handleLikedButton, setBlogs, blogs }) => {
   const [displayAll, setDisplayAll] = useState('short')
   const [currentUser,setCurrentUser]=useState(null)
+  const dispatcher=useDispatch()
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -21,7 +23,10 @@ const Blog = ({ blog, handleLikedButton, setBlogs, blogs }) => {
   const handleDeleteButton = async (blog) => {
     confirm('Are you sure')
     const response = await blogService.remove(blog)
-    setBlogs(blogs.filter(item => (item.id !== blog.id)))
+    dispatcher({
+      type:'blogs/deleteBlog',
+      payload:blog
+    })
   }
 
   const buttonDesign = {
